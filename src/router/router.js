@@ -77,6 +77,24 @@ function router(app) {
     .route("/create/comment")
     .post(authenJwt.verifyToken, BlogController.createComment);
   app.route("/comment/:idFeedback").get(BlogController.getComment);
+  // add/delete user like vào bảng like_post
+  app.route("/like").post(authenJwt.verifyToken, ShopControllers.like);
+  app.route("/dislike").delete(authenJwt.verifyToken, ShopControllers.dislike);
+  // increase/decrease trong bảng product
+  app
+    .route("/setlike/:idProduct")
+    .patch(authenJwt.verifyToken, ShopControllers.setLike);
+
+  // get all user liked accouding idProduct
+  app
+    .route("/like/:idProduct")
+    .get(authenJwt.verifyToken, ShopControllers.getLike);
+
+    // get all product mà user đã like
+    app
+    .route("/like/product/:idUser")
+    .get(authenJwt.verifyToken, ShopControllers.getProductLiked);
+
 
   // * router
   app.route("*").get((req, res) => {

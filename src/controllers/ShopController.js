@@ -196,7 +196,6 @@ class ShopControllers {
   }
 
   // [UPDATE] /cart/update/incart/:idProduct
-
   inCart(req, res) {
     let sql = `UPDATE product
     SET inCart = ?
@@ -212,6 +211,93 @@ class ShopControllers {
         res.status(200).json(results);
       }
     );
+  }
+
+  // [POST] /like
+  like(req, res) {
+    const id = uuidv4();
+    const date = new Date();
+    let getDate = `${date.getFullYear()}-${
+      date.getMonth() + 1
+    }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+
+    let sql = `INSERT INTO like_post 
+    (id, idPost, idUser, createAt)
+    VALUES (?, ?, ?, ?)`;
+
+    // console.log(req.body);
+
+    connection.query(
+      sql,
+      [id, req.body.idProduct, req.body.idUser, getDate],
+      function (err, results) {
+        if (err) {
+          return res.status(404).send("lỗi");
+        }
+        res.status(200).json(req.body.idProduct);
+      }
+    );
+  }
+
+  // [GET] /like/:idProduct
+  getLike(req, res) {
+    let sql = `SELECT * FROM fashion_shop.like_post where idPost = ?`;
+    // console.log("pream:", req.params);
+    connection.query(sql, [req.params.idProduct], function (err, results) {
+      if (err) {
+        return res.status(404).send("lỗi");
+      }
+      res.status(200).json(results);
+    });
+  }
+
+  // [DELETE] /dislike
+  dislike(req, res) {
+    let sql = `DELETE FROM like_post WHERE idPost=? and idUser = ?`;
+    // console.log("quẻy:", req.query);
+    connection.query(
+      sql,
+      [req.query.idProduct, req.query.idUser],
+      function (err, results) {
+        if (err) {
+          return res.status(404).send("lỗi");
+        }
+        res.status(200).json(req.query.idProduct);
+      }
+    );
+  }
+
+  // [PATCH] /setlike/:idProduct
+  setLike(req, res) {
+    let sql = `UPDATE product
+    SET product.like = ?
+    WHERE idProduct = ?`;
+
+    // console.log("prams:", req.params);
+    // console.log("body:", req.body);
+
+    connection.query(
+      sql,
+      [req.body.like, req.params.idProduct],
+      function (err, results) {
+        if (err) {
+          return res.status(404).send("lỗi");
+        }
+        res.status(200).json(req.params.idProduct);
+      }
+    );
+  }
+
+  // [GET] /like/product/:idUser
+  getProductLiked(req, res) {
+    let sql = `SELECT idPost FROM fashion_shop.like_post where idUser = ?`;
+    // console.log("pream:", req.params);
+    connection.query(sql, [req.params.idUser], function (err, results) {
+      if (err) {
+        return res.status(404).send("lỗi");
+      }
+      res.status(200).json(results);
+    });
   }
 }
 

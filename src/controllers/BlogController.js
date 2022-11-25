@@ -103,7 +103,7 @@ class BlogControllers {
 
   // [GET] /comment/:idFeedback
   getComment(req, res, next) {
-    console.log("idFeedback: ", req.params);
+    // console.log("idFeedback: ", req.params);
     let sql = `SELECT user.avatar, 
     user.username, 
     feedback.comment, 
