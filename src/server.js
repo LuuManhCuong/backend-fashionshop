@@ -5,7 +5,7 @@ const router = require("./router/router");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const http = require('http').Server(app);
+const http = require("http").Server(app);
 const socketIO = require("socket.io")(http, {
   cors: {
     origin: "http://localhost:3000",
